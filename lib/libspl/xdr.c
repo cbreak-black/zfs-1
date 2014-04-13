@@ -68,8 +68,11 @@ xdr_control(XDR *xdrs, int request, void *info)
 		 */
 		int32p = (int32_t *)info;
 		len = RNDUP((int)(*int32p));
-		if ((xdrs->x_handy -= len) < 0)
+		if (xdrs->x_handy < len) {
+			xdrs->x_handy = 0; /* uint32_t would underflow */
 			return (FALSE);
+		}
+		xdrs->x_handy -= len;
 		xdrs->x_private += len;
 		return (TRUE);
 

@@ -372,7 +372,7 @@ usage_prop_cb(int prop, void *cb)
 	else
 		(void) fprintf(fp, "%s\n", zfs_prop_values(prop));
 
-	return (ZPROP_CONT);
+	return (ZFS_PROP_CONT);
 }
 
 /*
@@ -1421,7 +1421,7 @@ get_callback(zfs_handle_t *zhp, void *data)
 		    pl == cbp->cb_proplist)
 			continue;
 
-		if (pl->pl_prop != ZPROP_INVAL) {
+		if (pl->pl_prop != ZFS_PROP_INVALID) {
 			if (zfs_prop_get(zhp, pl->pl_prop, buf,
 			    sizeof (buf), &sourcetype, source,
 			    sizeof (source),
@@ -1762,7 +1762,7 @@ inherit_recurse_cb(zfs_handle_t *zhp, void *data)
 	 * If we're doing it recursively, then ignore properties that
 	 * are not valid for this type of dataset.
 	 */
-	if (prop != ZPROP_INVAL &&
+	if (prop != ZFS_PROP_INVALID &&
 	    !zfs_prop_valid_for_type(prop, zfs_get_type(zhp), B_FALSE))
 		return (0);
 
@@ -1822,7 +1822,7 @@ zfs_do_inherit(int argc, char **argv)
 	argc--;
 	argv++;
 
-	if ((prop = zfs_name_to_prop(propname)) != ZPROP_INVAL) {
+	if ((prop = zfs_name_to_prop(propname)) != ZFS_PROP_INVALID) {
 		if (zfs_prop_readonly(prop)) {
 			(void) fprintf(stderr, gettext(
 			    "%s property is read-only\n"),
@@ -2841,7 +2841,7 @@ print_header(list_cbdata_t *cb)
 		}
 
 		right_justify = B_FALSE;
-		if (pl->pl_prop != ZPROP_INVAL) {
+		if (pl->pl_prop != ZFS_PROP_INVALID) {
 			header = zfs_prop_column_name(pl->pl_prop);
 			right_justify = zfs_prop_align_right(pl->pl_prop);
 		} else {
@@ -2892,7 +2892,7 @@ print_dataset(zfs_handle_t *zhp, list_cbdata_t *cb)
 			    sizeof (property));
 			propstr = property;
 			right_justify = zfs_prop_align_right(pl->pl_prop);
-		} else if (pl->pl_prop != ZPROP_INVAL) {
+		} else if (pl->pl_prop != ZFS_PROP_INVALID) {
 			if (zfs_prop_get(zhp, pl->pl_prop, property,
 			    sizeof (property), NULL, NULL, 0,
 			    cb->cb_literal) != 0)

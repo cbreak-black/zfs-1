@@ -421,7 +421,7 @@ change_one(zfs_handle_t *zhp, void *data)
 	 * then check out the companion property which is tracked
 	 * in cl_shareprop
 	 */
-	if (clp->cl_shareprop != ZPROP_INVAL &&
+	if (clp->cl_shareprop != ZFS_PROP_INVALID &&
 	    zfs_prop_get(zhp, clp->cl_shareprop, property,
 	    sizeof (property), &share_sourcetype, where, sizeof (where),
 	    B_FALSE) != 0) {
@@ -432,7 +432,7 @@ change_one(zfs_handle_t *zhp, void *data)
 	if (clp->cl_alldependents || clp->cl_allchildren ||
 	    sourcetype == ZPROP_SRC_DEFAULT ||
 	    sourcetype == ZPROP_SRC_INHERITED ||
-	    (clp->cl_shareprop != ZPROP_INVAL &&
+	    (clp->cl_shareprop != ZFS_PROP_INVALID &&
 	    (share_sourcetype == ZPROP_SRC_DEFAULT ||
 	    share_sourcetype == ZPROP_SRC_INHERITED))) {
 		if ((cn = zfs_alloc(zfs_get_handle(zhp),

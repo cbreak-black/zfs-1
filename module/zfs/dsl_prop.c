@@ -51,7 +51,7 @@ dodefault(const char *propname, int intsz, int numints, void *buf)
 	 * have a default value that can be used as the initial
 	 * value.
 	 */
-	if ((prop = zfs_name_to_prop(propname)) == ZPROP_INVAL ||
+	if ((prop = zfs_name_to_prop(propname)) == ZFS_PROP_INVALID ||
 	    (zfs_prop_readonly(prop) && !zfs_prop_setonce(prop)))
 		return (SET_ERROR(ENOENT));
 
@@ -89,7 +89,7 @@ dsl_prop_get_dd(dsl_dir_t *dd, const char *propname,
 		setpoint[0] = '\0';
 
 	prop = zfs_name_to_prop(propname);
-	inheritable = (prop == ZPROP_INVAL || zfs_prop_inheritable(prop));
+	inheritable = (prop == ZFS_PROP_INVALID || zfs_prop_inheritable(prop));
 	inheritstr = kmem_asprintf("%s%s", propname, ZPROP_INHERIT_SUFFIX);
 	recvdstr = kmem_asprintf("%s%s", propname, ZPROP_RECVD_SUFFIX);
 
@@ -167,7 +167,7 @@ dsl_prop_get_ds(dsl_dataset_t *ds, const char *propname,
 	uint64_t zapobj;
 
 	ASSERT(dsl_pool_config_held(ds->ds_dir->dd_pool));
-	inheritable = (prop == ZPROP_INVAL || zfs_prop_inheritable(prop));
+	inheritable = (prop == ZFS_PROP_INVALID || zfs_prop_inheritable(prop));
 	snapshot = (ds->ds_phys != NULL && dsl_dataset_is_snapshot(ds));
 	zapobj = (ds->ds_phys == NULL ? 0 : ds->ds_phys->ds_props_obj);
 
@@ -919,12 +919,12 @@ dsl_prop_get_all_impl(objset_t *mos, uint64_t propobj,
 		prop = zfs_name_to_prop(propname);
 
 		/* Skip non-inheritable properties. */
-		if ((flags & DSL_PROP_GET_INHERITING) && prop != ZPROP_INVAL &&
+		if ((flags & DSL_PROP_GET_INHERITING) && prop != ZFS_PROP_INVALID &&
 		    !zfs_prop_inheritable(prop))
 			continue;
 
 		/* Skip properties not valid for this type. */
-		if ((flags & DSL_PROP_GET_SNAPSHOT) && prop != ZPROP_INVAL &&
+		if ((flags & DSL_PROP_GET_SNAPSHOT) && prop != ZFS_PROP_INVALID &&
 		    !zfs_prop_valid_for_type(prop, ZFS_TYPE_SNAPSHOT, B_FALSE))
 			continue;
 

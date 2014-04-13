@@ -1069,7 +1069,7 @@ zfs_secpolicy_inherit_prop(zfs_cmd_t *zc, nvlist_t *innvl, cred_t *cr)
 {
 	zfs_prop_t prop = zfs_name_to_prop(zc->zc_value);
 
-	if (prop == ZPROP_INVAL) {
+	if (prop == ZFS_PROP_INVALID) {
 		if (!zfs_prop_user(zc->zc_value))
 			return (SET_ERROR(EINVAL));
 		return (zfs_secpolicy_write_perms(zc->zc_name,
@@ -2286,7 +2286,7 @@ zfs_prop_set_special(const char *dsname, zprop_source_t source,
 	uint64_t intval;
 	int err;
 
-	if (prop == ZPROP_INVAL) {
+	if (prop == ZFS_PROP_INVALID) {
 		if (zfs_prop_userquota(propname))
 			return (zfs_prop_set_userquota(dsname, pair));
 		return (-1);
@@ -2423,7 +2423,7 @@ retry:
 		}
 
 		/* Validate value type */
-		if (err == 0 && prop == ZPROP_INVAL) {
+		if (err == 0 && prop == ZFS_PROP_INVALID) {
 			if (zfs_prop_user(propname)) {
 				if (nvpair_type(propval) != DATA_TYPE_STRING)
 					err = SET_ERROR(EINVAL);
@@ -2685,7 +2685,7 @@ zfs_ioc_inherit_prop(zfs_cmd_t *zc)
 		 * zfs_prop_set_special() expects properties in the form of an
 		 * nvpair with type info.
 		 */
-		if (prop == ZPROP_INVAL) {
+		if (prop == ZFS_PROP_INVALID) {
 			if (!zfs_prop_user(propname))
 				return (SET_ERROR(EINVAL));
 
@@ -2724,7 +2724,7 @@ zfs_ioc_inherit_prop(zfs_cmd_t *zc)
 		 * and reservation to the received or default values even though
 		 * they are not considered inheritable.
 		 */
-		if (prop != ZPROP_INVAL && !zfs_prop_inheritable(prop))
+		if (prop != ZFS_PROP_INVALID && !zfs_prop_inheritable(prop))
 			return (SET_ERROR(EINVAL));
 	}
 
@@ -3558,7 +3558,7 @@ zfs_check_settable(const char *dsname, nvpair_t *pair, cred_t *cr)
 	uint64_t intval;
 	int err;
 
-	if (prop == ZPROP_INVAL) {
+	if (prop == ZFS_PROP_INVALID) {
 		if (zfs_prop_user(propname)) {
 			if ((err = zfs_secpolicy_write_perms(dsname,
 			    ZFS_DELEG_PERM_USERPROP, cr)))

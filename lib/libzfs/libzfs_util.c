@@ -1122,7 +1122,7 @@ zprop_print_headers(zprop_get_cbdata_t *cbp, zfs_type_t type)
 		/*
 		 * 'PROPERTY' column
 		 */
-		if (pl->pl_prop != ZPROP_INVAL) {
+		if (pl->pl_prop != ZFS_PROP_INVALID) {
 			const char *propname = (type == ZFS_TYPE_POOL) ?
 			    zpool_prop_to_name(pl->pl_prop) :
 			    zfs_prop_to_name(pl->pl_prop);
@@ -1531,15 +1531,15 @@ addlist(libzfs_handle_t *hdl, char *propname, zprop_list_t **listp,
 
 	prop = zprop_name_to_prop(propname, type);
 
-	if (prop != ZPROP_INVAL && !zprop_valid_for_type(prop, type, B_FALSE))
-		prop = ZPROP_INVAL;
+	if (prop != ZPOOL_PROP_INVALID && !zprop_valid_for_type(prop, type, B_FALSE))
+		prop = ZPOOL_PROP_INVALID;
 
 	/*
 	 * When no property table entry can be found, return failure if
 	 * this is a pool property or if this isn't a user-defined
 	 * dataset property,
 	 */
-	if (prop == ZPROP_INVAL && ((type == ZFS_TYPE_POOL &&
+	if (prop == ZPOOL_PROP_INVALID && ((type == ZFS_TYPE_POOL &&
 	    !zpool_prop_feature(propname) &&
 	    !zpool_prop_unsupported(propname)) ||
 	    (type == ZFS_TYPE_DATASET && !zfs_prop_user(propname) &&
@@ -1554,7 +1554,7 @@ addlist(libzfs_handle_t *hdl, char *propname, zprop_list_t **listp,
 		return (-1);
 
 	entry->pl_prop = prop;
-	if (prop == ZPROP_INVAL) {
+	if (prop == ZPOOL_PROP_INVALID) {
 		if ((entry->pl_user_prop = zfs_strdup(hdl, propname)) ==
 		    NULL) {
 			free(entry);
@@ -1684,7 +1684,7 @@ zprop_expand_list_cb(int prop, void *cb)
 	expand_data_t *edp = cb;
 
 	if ((entry = zfs_alloc(edp->hdl, sizeof (zprop_list_t))) == NULL)
-		return (ZPROP_INVAL);
+		return (ZPOOL_PROP_INVALID);
 
 	entry->pl_prop = prop;
 	entry->pl_width = zprop_width(prop, &entry->pl_fixed, edp->type);
@@ -1693,7 +1693,7 @@ zprop_expand_list_cb(int prop, void *cb)
 	*(edp->last) = entry;
 	edp->last = &entry->pl_next;
 
-	return (ZPROP_CONT);
+	return (ZPOOL_PROP_CONT);
 }
 
 int
@@ -1716,7 +1716,7 @@ zprop_expand_list(libzfs_handle_t *hdl, zprop_list_t **plp, zfs_type_t type)
 		exp.type = type;
 
 		if (zprop_iter_common(zprop_expand_list_cb, &exp, B_FALSE,
-		    B_FALSE, type) == ZPROP_INVAL)
+		    B_FALSE, type) == ZPOOL_PROP_INVALID)
 			return (-1);
 
 		/*

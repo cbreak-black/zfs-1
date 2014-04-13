@@ -637,7 +637,7 @@ send_iterate_prop(zfs_handle_t *zhp, nvlist_t *nv)
 			 * software to still send datasets containing these
 			 * properties, with the unknown properties elided.
 			 */
-			if (prop == ZPROP_INVAL)
+			if (prop == ZFS_PROP_INVALID)
 				continue;
 
 			if (zfs_prop_readonly(prop))

@@ -457,7 +457,7 @@ zpool_valid_proplist(libzfs_handle_t *hdl, const char *poolname,
 		const char *propname = nvpair_name(elem);
 
 		prop = zpool_name_to_prop(propname);
-		if (prop == ZPROP_INVAL && zpool_prop_feature(propname)) {
+		if (prop == ZPOOL_PROP_INVALID && zpool_prop_feature(propname)) {
 			int err;
 			zfeature_info_t *feature;
 			char *fname = strchr(propname, '@') + 1;
@@ -497,7 +497,7 @@ zpool_valid_proplist(libzfs_handle_t *hdl, const char *poolname,
 		/*
 		 * Make sure this property is valid and applies to this type.
 		 */
-		if (prop == ZPROP_INVAL) {
+		if (prop == ZPOOL_PROP_INVALID) {
 			zfs_error_aux(hdl, dgettext(TEXT_DOMAIN,
 			    "invalid property '%s'"), propname);
 			(void) zfs_error(hdl, EZFS_BADPROP, errbuf);
@@ -785,7 +785,7 @@ zpool_expand_proplist(zpool_handle_t *zhp, zprop_list_t **plp)
 		for (i = 0; i < SPA_FEATURES; i++) {
 			zprop_list_t *entry = zfs_alloc(hdl,
 			    sizeof (zprop_list_t));
-			entry->pl_prop = ZPROP_INVAL;
+			entry->pl_prop = ZPOOL_PROP_INVALID;
 			entry->pl_user_prop = zfs_asprintf(hdl, "feature@%s",
 			    spa_feature_table[i].fi_uname);
 			entry->pl_width = strlen(entry->pl_user_prop);
@@ -829,7 +829,7 @@ zpool_expand_proplist(zpool_handle_t *zhp, zprop_list_t **plp)
 		}
 
 		entry = zfs_alloc(hdl, sizeof (zprop_list_t));
-		entry->pl_prop = ZPROP_INVAL;
+		entry->pl_prop = ZPOOL_PROP_INVALID;
 		entry->pl_user_prop = propname;
 		entry->pl_width = strlen(entry->pl_user_prop);
 		entry->pl_all = B_TRUE;
@@ -843,7 +843,7 @@ zpool_expand_proplist(zpool_handle_t *zhp, zprop_list_t **plp)
 		if (entry->pl_fixed)
 			continue;
 
-		if (entry->pl_prop != ZPROP_INVAL &&
+		if (entry->pl_prop != ZPOOL_PROP_INVALID &&
 		    zpool_get_prop(zhp, entry->pl_prop, buf, sizeof (buf),
 		    NULL) == 0) {
 			if (strlen(buf) > entry->pl_width)

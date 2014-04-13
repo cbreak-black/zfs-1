@@ -314,7 +314,7 @@ spa_prop_get(spa_t *spa, nvlist_t **nvp)
 		zprop_source_t src = ZPROP_SRC_DEFAULT;
 		zpool_prop_t prop;
 
-		if ((prop = zpool_name_to_prop(za.za_name)) == ZPROP_INVAL)
+		if ((prop = zpool_name_to_prop(za.za_name)) == ZPOOL_PROP_INVALID)
 			continue;
 
 		switch (za.za_integer_length) {
@@ -404,7 +404,7 @@ spa_prop_validate(spa_t *spa, nvlist_t *props)
 		zpool_prop_t prop = zpool_name_to_prop(propname);
 
 		switch ((int)prop) {
-		case ZPROP_INVAL:
+		case ZPOOL_PROP_INVALID:
 			if (!zpool_prop_feature(propname)) {
 				error = SET_ERROR(EINVAL);
 				break;
@@ -642,7 +642,7 @@ spa_prop_set(spa_t *spa, nvlist_t *nvp)
 		    prop == ZPOOL_PROP_READONLY)
 			continue;
 
-		if (prop == ZPOOL_PROP_VERSION || prop == ZPROP_INVAL) {
+		if (prop == ZPOOL_PROP_VERSION || prop == ZPOOL_PROP_INVALID) {
 			uint64_t ver;
 
 			if (prop == ZPOOL_PROP_VERSION) {
@@ -5960,7 +5960,7 @@ spa_sync_props(void *arg, dmu_tx_t *tx)
 
 		prop = zpool_name_to_prop(nvpair_name(elem));
 		switch ((int)prop) {
-		case ZPROP_INVAL:
+		case ZPOOL_PROP_INVALID:
 			/*
 			 * We checked this earlier in spa_prop_validate().
 			 */

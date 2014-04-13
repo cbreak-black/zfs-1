@@ -303,7 +303,7 @@ print_prop_cb(int prop, void *cb)
 	else
 		(void) fprintf(fp, "%s\n", zpool_prop_values(prop));
 
-	return (ZPROP_CONT);
+	return (ZPOOL_PROP_CONT);
 }
 
 /*
@@ -417,7 +417,7 @@ static int
 add_prop_list(const char *propname, char *propval, nvlist_t **props,
     boolean_t poolprop)
 {
-	zpool_prop_t prop = ZPROP_INVAL;
+	zpool_prop_t prop = ZPOOL_PROP_INVALID;
 	zfs_prop_t fprop;
 	nvlist_t *proplist;
 	const char *normnm;
@@ -435,7 +435,7 @@ add_prop_list(const char *propname, char *propval, nvlist_t **props,
 	if (poolprop) {
 		const char *vname = zpool_prop_to_name(ZPOOL_PROP_VERSION);
 
-		if ((prop = zpool_name_to_prop(propname)) == ZPROP_INVAL &&
+		if ((prop = zpool_name_to_prop(propname)) == ZPOOL_PROP_INVALID &&
 		    !zpool_prop_feature(propname)) {
 			(void) fprintf(stderr, gettext("property '%s' is "
 			    "not a valid pool property\n"), propname);
@@ -446,7 +446,7 @@ add_prop_list(const char *propname, char *propval, nvlist_t **props,
 		 * feature@ properties and version should not be specified
 		 * at the same time.
 		 */
-		if ((prop == ZPROP_INVAL && zpool_prop_feature(propname) &&
+		if ((prop == ZPOOL_PROP_INVALID && zpool_prop_feature(propname) &&
 		    nvlist_exists(proplist, vname)) ||
 		    (prop == ZPOOL_PROP_VERSION &&
 		    prop_list_contains_feature(proplist))) {
@@ -462,7 +462,7 @@ add_prop_list(const char *propname, char *propval, nvlist_t **props,
 		else
 			normnm = zpool_prop_to_name(prop);
 	} else {
-		if ((fprop = zfs_name_to_prop(propname)) != ZPROP_INVAL) {
+		if ((fprop = zfs_name_to_prop(propname)) != ZFS_PROP_INVALID) {
 			normnm = zfs_prop_to_name(fprop);
 		} else {
 			normnm = propname;
@@ -2896,7 +2896,7 @@ print_header(list_cbdata_t *cb)
 			first = B_FALSE;
 
 		right_justify = B_FALSE;
-		if (pl->pl_prop != ZPROP_INVAL) {
+		if (pl->pl_prop != ZPOOL_PROP_INVALID) {
 			header = zpool_prop_column_name(pl->pl_prop);
 			right_justify = zpool_prop_align_right(pl->pl_prop);
 		} else {
@@ -2954,7 +2954,7 @@ print_pool(zpool_handle_t *zhp, list_cbdata_t *cb)
 		}
 
 		right_justify = B_FALSE;
-		if (pl->pl_prop != ZPROP_INVAL) {
+		if (pl->pl_prop != ZPOOL_PROP_INVALID) {
 			if (pl->pl_prop == ZPOOL_PROP_EXPANDSZ &&
 			    zpool_get_prop_int(zhp, pl->pl_prop, NULL) == 0)
 				propstr = "-";
@@ -5574,7 +5574,7 @@ get_callback(zpool_handle_t *zhp, void *data)
 		    pl == cbp->cb_proplist)
 			continue;
 
-		if (pl->pl_prop == ZPROP_INVAL &&
+		if (pl->pl_prop == ZPOOL_PROP_INVALID &&
 		    (zpool_prop_feature(pl->pl_user_prop) ||
 		    zpool_prop_unsupported(pl->pl_user_prop))) {
 			srctype = ZPROP_SRC_LOCAL;

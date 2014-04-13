@@ -94,7 +94,7 @@ zfs_deleg_canonicalize_perm(const char *perm)
 	}
 
 	prop = zfs_name_to_prop(perm);
-	if (prop != ZPROP_INVAL && zfs_prop_delegatable(prop))
+	if (prop != ZFS_PROP_INVALID && zfs_prop_delegatable(prop))
 		return (zfs_prop_to_name(prop));
 	return (NULL);
 

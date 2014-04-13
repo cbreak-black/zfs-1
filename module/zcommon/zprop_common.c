@@ -160,7 +160,7 @@ zprop_compare(const void *arg1, const void *arg2)
  * Iterate over all properties in the given property table, calling back
  * into the specified function for each property. We will continue to
  * iterate until we either reach the end or the callback function returns
- * something other than ZPROP_CONT.
+ * something other than ZFS_PROP_CONT.
  */
 int
 zprop_iter_common(zprop_func func, void *cb, boolean_t show_all,
@@ -178,7 +178,7 @@ zprop_iter_common(zprop_func func, void *cb, boolean_t show_all,
 	order = kmem_alloc(size, KM_PUSHPAGE);
 #else
 	if ((order = malloc(size)) == NULL)
-		return (ZPROP_CONT);
+		return (ZFS_PROP_CONT);
 #endif
 
 	for (j = 0; j < num_props; j++)
@@ -189,10 +189,10 @@ zprop_iter_common(zprop_func func, void *cb, boolean_t show_all,
 		    zprop_compare);
 	}
 
-	prop = ZPROP_CONT;
+	prop = ZFS_PROP_CONT;
 	for (i = 0; i < num_props; i++) {
 		if ((order[i]->pd_visible || show_all) &&
-		    (func(order[i]->pd_propnum, cb) != ZPROP_CONT)) {
+		    (func(order[i]->pd_propnum, cb) != ZFS_PROP_CONT)) {
 			prop = order[i]->pd_propnum;
 			break;
 		}
@@ -247,7 +247,7 @@ zprop_name_to_prop_cb(int prop, void *cb_data)
 	    &data->prop_tbl[prop]))
 		return (prop);
 
-	return (ZPROP_CONT);
+	return (ZFS_PROP_CONT);
 }
 
 int
@@ -262,7 +262,7 @@ zprop_name_to_prop(const char *propname, zfs_type_t type)
 	prop = zprop_iter_common(zprop_name_to_prop_cb, &cb_data,
 	    B_TRUE, B_FALSE, type);
 
-	return (prop == ZPROP_CONT ? ZPROP_INVAL : prop);
+	return (prop == ZFS_PROP_CONT ? ZFS_PROP_INVALID : prop);
 }
 
 int
@@ -273,7 +273,7 @@ zprop_string_to_index(int prop, const char *string, uint64_t *index,
 	const zprop_index_t *idx_tbl;
 	int i;
 
-	if (prop == ZPROP_INVAL || prop == ZPROP_CONT)
+	if (prop == ZFS_PROP_INVALID || prop == ZFS_PROP_CONT)
 		return (-1);
 
 	ASSERT(prop < zprop_get_numprops(type));
@@ -299,7 +299,7 @@ zprop_index_to_string(int prop, uint64_t index, const char **string,
 	const zprop_index_t *idx_tbl;
 	int i;
 
-	if (prop == ZPROP_INVAL || prop == ZPROP_CONT)
+	if (prop == ZFS_PROP_INVALID || prop == ZFS_PROP_CONT)
 		return (-1);
 
 	ASSERT(prop < zprop_get_numprops(type));
@@ -341,7 +341,7 @@ zprop_values(int prop, zfs_type_t type)
 {
 	zprop_desc_t *prop_tbl;
 
-	ASSERT(prop != ZPROP_INVAL && prop != ZPROP_CONT);
+	ASSERT(prop != ZFS_PROP_INVALID && prop != ZFS_PROP_CONT);
 	ASSERT(prop < zprop_get_numprops(type));
 
 	prop_tbl = zprop_get_proptable(type);
@@ -361,7 +361,7 @@ zprop_valid_for_type(int prop, zfs_type_t type, boolean_t headcheck)
 {
 	zprop_desc_t *prop_tbl;
 
-	if (prop == ZPROP_INVAL || prop == ZPROP_CONT)
+	if (prop == ZFS_PROP_INVALID || prop == ZFS_PROP_CONT)
 		return (B_FALSE);
 
 	ASSERT(prop < zprop_get_numprops(type));
@@ -385,7 +385,7 @@ zprop_width(int prop, boolean_t *fixed, zfs_type_t type)
 	size_t ret;
 	int i;
 
-	ASSERT(prop != ZPROP_INVAL && prop != ZPROP_CONT);
+	ASSERT(prop != ZFS_PROP_INVALID && prop != ZFS_PROP_CONT);
 	ASSERT(prop < zprop_get_numprops(type));
 
 	prop_tbl = zprop_get_proptable(type);
